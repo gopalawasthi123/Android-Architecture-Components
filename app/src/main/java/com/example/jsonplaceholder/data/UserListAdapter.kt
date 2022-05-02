@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jsonplaceholder.PostsActivity
 import com.example.jsonplaceholder.R
 
 class UserListAdapter  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(USERS_COMPARATOR){
@@ -27,11 +28,13 @@ class UserListAdapter  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(U
                 return  UserViewHolder(view)
             }
 
-            fun setClicksForViews(viewHolder: UserViewHolder){
+            fun setClicksForViews(viewHolder: UserViewHolder,userItem: UsersItem){
                 viewHolder.userNameView.setOnClickListener(View.OnClickListener {
                    val intent = Intent(viewHolder.itemView.context, PostsActivity::class.java)
+                    intent.putExtra("userId",userItem.id)
                     viewHolder.itemView.context.startActivity(intent)
                     Toast.makeText(viewHolder.itemView.context,"Position is ${viewHolder.adapterPosition}",Toast.LENGTH_LONG).show()
+
                 })
             }
         }
@@ -55,7 +58,7 @@ class UserListAdapter  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(U
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
        val viewHolder = UserViewHolder.create(parent)
-        UserViewHolder.setClicksForViews(viewHolder)
+        UserViewHolder.setClicksForViews(viewHolder,getItem(viewHolder.adapterPosition))
         return  viewHolder
     }
 

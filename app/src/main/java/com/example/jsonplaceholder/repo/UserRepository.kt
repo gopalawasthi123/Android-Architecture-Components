@@ -18,7 +18,7 @@ class UserRepository @Inject constructor(private val userService : IUserService,
 
     suspend fun getUsers() : List<UsersItem> {
         val userList =   userdao.getListUsers()
-        if(userList.toList().isEmpty()){
+        if(userList.isEmpty()){
             if(userService.getUsers().isSuccessful){
                 userdao.insertAllUsers(userService.getUsers().body())
             }

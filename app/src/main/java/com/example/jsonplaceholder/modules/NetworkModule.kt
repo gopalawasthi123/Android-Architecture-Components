@@ -1,9 +1,7 @@
 package com.example.jsonplaceholder.modules
 
-import com.example.jsonplaceholder.data.IUserDao
 import com.example.jsonplaceholder.data.IUserService
 import com.example.jsonplaceholder.util.Constants.BASEURL
-import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -33,5 +31,8 @@ object NetworkModule {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(IUserService :: class.java)
+
     }
+
+
 }
