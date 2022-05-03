@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jsonplaceholder.PostsActivity
 import com.example.jsonplaceholder.R
+import com.example.jsonplaceholder.listeners.UserClickInterface
 
-class UserListAdapter  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(USERS_COMPARATOR){
+class UserListAdapter(var userClickInterface: UserClickInterface)  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(USERS_COMPARATOR){
 
     class UserViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
 
@@ -22,23 +23,19 @@ class UserListAdapter  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(U
         fun binds(userItem : UsersItem){
             userNameView.text = userItem.name
         }
-        companion object{
-            fun create(parent: ViewGroup) : UserViewHolder{
-                val  view = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_item,parent,false)
-                return  UserViewHolder(view)
-            }
-
-            fun setClicksForViews(viewHolder: UserViewHolder,userItem: UsersItem){
-                viewHolder.userNameView.setOnClickListener(View.OnClickListener {
-                   val intent = Intent(viewHolder.itemView.context, PostsActivity::class.java)
-                    intent.putExtra("userId",userItem.id)
-                    viewHolder.itemView.context.startActivity(intent)
-                    Toast.makeText(viewHolder.itemView.context,"Position is ${viewHolder.adapterPosition}",Toast.LENGTH_LONG).show()
-
-                })
+        companion object {
+            fun create(parent: ViewGroup): UserViewHolder {
+                val view = LayoutInflater.from(parent.context)
+                    .inflate(R.layout.recyclerview_item, parent, false)
+                return UserViewHolder(view)
             }
         }
 
+            fun setClicksForViews(viewHolder: UserViewHolder,userClickInterface: UserClickInterface){
+                viewHolder.userNameView.setOnClickListener(View.OnClickListener {
+                    userClickInterface.OnUserClicked(adapterPosition)
+                })
+            }
 
 
     }
@@ -58,7 +55,7 @@ class UserListAdapter  : ListAdapter<UsersItem,UserListAdapter.UserViewHolder>(U
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UserViewHolder {
        val viewHolder = UserViewHolder.create(parent)
-        UserViewHolder.setClicksForViews(viewHolder,getItem(viewHolder.adapterPosition))
+        viewHolder.setClicksForViews(viewHolder,userClickInterface)
         return  viewHolder
     }
 
