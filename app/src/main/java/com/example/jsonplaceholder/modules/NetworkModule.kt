@@ -1,5 +1,6 @@
 package com.example.jsonplaceholder.modules
 
+import com.example.jsonplaceholder.data.IPostService
 import com.example.jsonplaceholder.data.IUserService
 import com.example.jsonplaceholder.util.Constants.BASEURL
 import dagger.Module
@@ -18,7 +19,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun providesRetrofitInstance() : IUserService{
+    fun providesRetrofitInstance() : Retrofit{
 
         val logger = HttpLoggingInterceptor().apply {level = HttpLoggingInterceptor.Level.BASIC }
 
@@ -30,9 +31,18 @@ object NetworkModule {
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(IUserService :: class.java)
-
     }
 
+    @Provides
+    @Singleton
+    fun ProvidesUserService(retrofit: Retrofit) : IUserService{
+        return retrofit.create(IUserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun ProvidesPostService(retrofit: Retrofit): IPostService{
+        return retrofit.create(IPostService :: class.java)
+    }
 
 }

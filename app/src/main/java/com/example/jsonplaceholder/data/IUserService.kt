@@ -11,8 +11,4 @@ interface IUserService {
     @GET("/users")
     suspend fun getUsers() : Response<List<UsersItem>>
 
-    @GET("/posts")
-    suspend fun getPostsOfUser(@Query("userId") userId :Int) : Response<List<PostsItem>>
-
-
 }
